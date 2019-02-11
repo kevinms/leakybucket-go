@@ -1,6 +1,7 @@
 # A scalable leaky bucket implementation in Go.
 
 [![Build Status](https://travis-ci.com/kevinms/leakybucket-go.svg?branch=master)](https://travis-ci.com/kevinms/leakybucket-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kevinms/leakybucket-go)](https://goreportcard.com/report/github.com/kevinms/leakybucket-go)
 [![GoDoc](https://godoc.org/github.com/kevinms/leakybucket-go?status.svg)](https://godoc.org/github.com/kevinms/leakybucket-go)
 
 There are at least two different definitions of the leaky bucket algorithm. This package implements the leaky bucket as a meter. For more details see:
