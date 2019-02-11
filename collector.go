@@ -26,11 +26,11 @@ type Collector struct {
 	quit     chan bool
 }
 
-// Creates a new Collector. When new buckets are created within the Collector,
-// they will be assigned the capacity and rate of the Collector. A Collector
-// does not provide a way to change the rate or capacity of bucket's within it.
-// If different rates or capacities are required, either use multiple
-// Collector's or manage your own LeakyBucket's.
+// NewCollector creates a new Collector. When new buckets are created within
+// the Collector, they will be assigned the capacity and rate of the Collector.
+// A Collector does not provide a way to change the rate or capacity of
+// bucket's within it. If different rates or capacities are required, either
+// use multiple Collector's or manage your own LeakyBucket's.
 //
 // If deleteEmptyBuckets is true, a concurrent goroutine will be run that
 // watches for bucket's that become empty and automatically removes them,
@@ -51,7 +51,7 @@ func NewCollector(rate float64, capacity int64, deleteEmptyBuckets bool) *Collec
 	return c
 }
 
-// Frees the collector's resources. If the collector was created with
+// Free releases the collector's resources. If the collector was created with
 // deleteEmptyBuckets = true, then the goroutine looking for empty buckets,
 // will be stopped.
 func (c *Collector) Free() {
@@ -59,8 +59,8 @@ func (c *Collector) Free() {
 	close(c.quit)
 }
 
-// Removes all internal buckets and resets the collector back to as if it was
-// just created.
+// Reset removes all internal buckets and resets the collector back to as if it
+// was just created.
 func (c *Collector) Reset() {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -70,25 +70,25 @@ func (c *Collector) Reset() {
 	c.heap = make(priorityQueue, 0, 4096)
 }
 
-// Returns the collector's capacity.
+// Capacity returns the collector's capacity.
 func (c *Collector) Capacity() int64 {
 	return c.capacity
 }
 
-// Returns the collector's rate.
+// Rate returns the collector's rate.
 func (c *Collector) Rate() float64 {
 	return c.rate
 }
 
-// Returns the remaining capacity of the internal bucket associated with key.
-// If key is not associated with a bucket internally, it is treated as being
-// empty.
+// Remaining returns the remaining capacity of the internal bucket associated
+// with key.  If key is not associated with a bucket internally, it is treated
+// as being empty.
 func (c *Collector) Remaining(key string) int64 {
 	return c.capacity - c.Count(key)
 }
 
-// Returns the count of the internal bucket associated with key. If key is not
-// associated with a bucket internally, it is treated as being empty.
+// Count returns the count of the internal bucket associated with key. If key
+// is not associated with a bucket internally, it is treated as being empty.
 func (c *Collector) Count(key string) int64 {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -101,9 +101,9 @@ func (c *Collector) Count(key string) int64 {
 	return b.Count()
 }
 
-// Returns how much time must pass until the internal bucket associated with
-// key is empty. If key is not associated with a bucket internally, it is
-// treated as being empty.
+// TillEmpty returns how much time must pass until the internal bucket
+// associated with key is empty. If key is not associated with a bucket
+// internally, it is treated as being empty.
 func (c *Collector) TillEmpty(key string) time.Duration {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -116,8 +116,8 @@ func (c *Collector) TillEmpty(key string) time.Duration {
 	return b.TillEmpty()
 }
 
-// Removes the internal bucket associated with key. If key is not associated
-// with a bucket internally, nothing is done.
+// Remove deletes the internal bucket associated with key. If key is not
+// associated with a bucket internally, nothing is done.
 func (c *Collector) Remove(key string) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -164,7 +164,7 @@ func (c *Collector) Add(key string, amount int64) int64 {
 	return n
 }
 
-// Removes all empty buckets in the collector.
+// Prune removes all empty buckets in the collector.
 func (c *Collector) Prune() {
 	c.lock.Lock()
 	for c.heap.Peak() != nil {
@@ -183,7 +183,8 @@ func (c *Collector) Prune() {
 	c.lock.Unlock()
 }
 
-// Runs a concurrent goroutine that calls Prune() at the given time interval.
+// PeriodicPrune runs a concurrent goroutine that calls Prune() at the given
+// time interval.
 func (c *Collector) PeriodicPrune(interval time.Duration) {
 	go func() {
 		ticker := time.NewTicker(interval)

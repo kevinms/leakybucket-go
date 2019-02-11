@@ -1,5 +1,5 @@
 /*
-Package LeakyBucket implements a scalable leaky bucket algorithm.
+Package leakybucket implements a scalable leaky bucket algorithm.
 
 There are at least two different definitions of the leaky bucket algorithm.
 This package implements the leaky bucket as a meter. For more details see:
@@ -45,7 +45,7 @@ import (
 // Makes it easy to test time based things.
 var now = time.Now
 
-// A LeakyBucket represents a bucket that leaks at a constant rate.
+// LeakyBucket represents a bucket that leaks at a constant rate.
 type LeakyBucket struct {
 	// The identifying key, used for map lookups.
 	key string
@@ -67,7 +67,7 @@ type LeakyBucket struct {
 	index int
 }
 
-// Creates a new LeakyBucket with the give rate and capacity.
+// NewLeakyBucket creates a new LeakyBucket with the give rate and capacity.
 func NewLeakyBucket(rate float64, capacity int64) *LeakyBucket {
 	return &LeakyBucket{
 		rate:     rate,
@@ -76,7 +76,7 @@ func NewLeakyBucket(rate float64, capacity int64) *LeakyBucket {
 	}
 }
 
-// Returns the bucket's current count.
+// Count returns the bucket's current count.
 func (b *LeakyBucket) Count() int64 {
 	if !now().Before(b.p) {
 		return 0
@@ -89,22 +89,22 @@ func (b *LeakyBucket) Count() int64 {
 	return count
 }
 
-// Returns the amount the bucket leaks per second.
+// Rate returns the amount the bucket leaks per second.
 func (b *LeakyBucket) Rate() float64 {
 	return b.rate
 }
 
-// Returns the bucket's capacity.
+// Capacity returns the bucket's capacity.
 func (b *LeakyBucket) Capacity() int64 {
 	return b.capacity
 }
 
-// Returns the bucket's remaining capacity.
+// Remaining returns the bucket's remaining capacity.
 func (b *LeakyBucket) Remaining() int64 {
 	return b.capacity - b.Count()
 }
 
-// Changes the bucket's capacity.
+// ChangeCapacity changes the bucket's capacity.
 //
 // If the bucket's current count is greater than the new capacity, the count
 // will be decreased to match the new capacity.
@@ -120,7 +120,7 @@ func (b *LeakyBucket) ChangeCapacity(capacity int64) {
 	b.capacity = capacity
 }
 
-// Returns how much time must pass until the bucket is empty.
+// TillEmpty returns how much time must pass until the bucket is empty.
 func (b *LeakyBucket) TillEmpty() time.Duration {
 	return b.p.Sub(now())
 }
