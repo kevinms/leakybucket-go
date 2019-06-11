@@ -1,4 +1,4 @@
-# A scalable leaky bucket implementation in Go.
+# A leaky bucket implementation in Go.
 
 [![Build Status](https://travis-ci.com/kevinms/leakybucket-go.svg?branch=master)](https://travis-ci.com/kevinms/leakybucket-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kevinms/leakybucket-go)](https://goreportcard.com/report/github.com/kevinms/leakybucket-go)
