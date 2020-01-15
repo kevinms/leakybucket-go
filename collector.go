@@ -2,7 +2,6 @@ package leakybucket
 
 import (
 	"container/heap"
-	"fmt"
 	"sync"
 	"time"
 )
@@ -175,7 +174,6 @@ func (c *Collector) Prune() {
 			break
 		}
 
-		fmt.Printf("Pruning '%s'\n", b.key)
 		// The bucket should be empty.
 		delete(c.buckets, b.key)
 		heap.Remove(&c.heap, b.index)
