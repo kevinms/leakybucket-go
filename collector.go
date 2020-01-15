@@ -2,7 +2,6 @@ package leakybucket
 
 import (
 	"container/heap"
-	"fmt"
 	"sync"
 	"time"
 )
